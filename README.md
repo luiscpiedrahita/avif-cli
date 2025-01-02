@@ -1,4 +1,4 @@
-# avif-cli
+# resursive avif-cli
 
 Command line utility to convert images to AVIF,
 requires a Node-API v9 compatible runtime:
@@ -47,7 +47,9 @@ yarn dlx avif
 
 ```
 Options:
-      --input               Input file name(s), supports globs/wildcards
+      --input               Input file name(s), supports globs/wildcards.
+                            New: If input folder is provided then its file
+                            structure is recreated recursively.
                     [string] [default: "*.{jpg,jpeg,tif,tiff,webp,png,gif,svg}"]
       --output              Output directory, default is same directory as input
                                                           [string] [default: ""]

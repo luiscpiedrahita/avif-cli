@@ -8,7 +8,8 @@
     "avif": "./bin/avif.js"
   },
   "scripts": {
-    "test": "prettier --check '**/*.js'"
+    "test": "prettier --check '**/*.js'",
+    "avif": "./bin/avif.js"
   },
   "repository": {
     "type": "git",

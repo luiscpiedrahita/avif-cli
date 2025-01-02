@@ -2,6 +2,8 @@
 
 const fs = require("fs").promises;
 const { constants } = require("fs");
+const convertPatternToPath = require("../lib/convertPatternToPath");
+const makeOutputDir = require("../lib/makeOutputDir");
 const {
   input,
   output,
@@ -16,21 +18,17 @@ const {
 } = require("../lib/cli");
 const { glob } = require("tinyglobby");
 const convert = require("../lib/convert");
+let originalInput = "";
 
 const avif = async () => {
   const files = await glob([input], { absolute: true });
   if (verbose) {
     process.stdout.write(`Found ${files.length} file(s) matching ${input}\n`);
   }
-  if (output) {
-    try {
-      await fs.access(output, constants.W_OK);
-    } catch (e) {
-      await fs.mkdir(output, { recursive: true });
-    }
-  }
+  await makeOutputDir(output);
   const results = await Promise.all(
-    files.map((file) =>
+    files.map((file, i) => {
+      originalInput = i === 0 ? convertPatternToPath(input) : originalInput;
       convert({
         input: file,
         output,
@@ -42,9 +40,10 @@ const avif = async () => {
         overwrite,
         appendExt,
         verbose,
-      }),
-    ),
+        originalInput,
+      });
+    })
   );
-  process.exit(results.every(Boolean) ? 0 : 1);
+  // process.exit(results.every(Boolean) ? 0 : 1);
 };
 avif();
